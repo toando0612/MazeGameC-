@@ -4,6 +4,7 @@
 #include <array>
 #include <vector>
 #include <type_traits>
+#include <cstdlib>
 using namespace std;
 
 typedef array<int, 4> edge;
@@ -24,7 +25,6 @@ class Cell {
         void setedge_list(array<edge, 4> new_edge_list){edge_lists = new_edge_list;}
         void setvisited(bool status){visited = status;}
         void setcoord(array<int, 2> newCoord){coord = newCoord;}
-
         auto getedge_list(){return edge_lists;}
         bool getvisited(){return visited;}
 
@@ -42,11 +42,13 @@ class MazeGame {
         vector<int> neighbours;
         int height;
         int width;
+        int cells;
     public:
     //methods actions on the attributes
-        void creatingMaze(){
+        int creatingMaze(){
         //1st draw of maze
-            currentLocation = {1,1};
+            cells = 1;
+            currentLocation = {0,0};
             vector<vector<Cell>> temp_maze;
             for (auto i = 0; i < width; i++)
             {
@@ -54,46 +56,105 @@ class MazeGame {
                 for (auto j = 0; j < height; j++)
                 {
                     array<edge, 4> temp_edges;
-                    temp_edges.at(0) = {i,j,i+1,j};
-                    temp_edges.at(1) = {i+1,j,i+1,j+1};
-                    temp_edges.at(2) = {i+1,j+1,i,j+1};
-                    temp_edges.at(3) = {i,j+1,i,j};
+                    temp_edges.at(0) = {i+1,j,i+1,j+1};
+                    temp_edges.at(1) = {i+1,j+1,i,j+1};
+                    temp_edges.at(2) = {i,j+1,i,j};
+                    temp_edges.at(3) = {i,j,i+1,j};
+
                     Cell cell;
-                    cell.setedge_list(temp_edges);
-                    cell.setvisited(false);
-                    cell.setcoord({i,j});
+                    if (i==0 && j == 0){
+                        cell.setedge_list(temp_edges);
+                        cell.setvisited(true);
+                        cell.setcoord({i,j});
+                    }else{
+                        cell.setedge_list(temp_edges);
+                        cell.setvisited(false);
+                        cell.setcoord({i,j});
+                    }
                     colums.push_back(cell);
                 }
                 temp_maze.push_back(colums);
             }
             setmaze(temp_maze);
-            int x = currentLocation[0];
-            int y = currentLocation[1];
-            cout << "x,y = " << x <<",";
-            cout << y << endl;
-            //become of maze
-//            if (x == 0 ){
-//                if (y == 0){
-//                    //top left corner
-//                } else if(y == height-1){
-//                    //bottom left corner
-//                } else {
-//                    // left edge
-//                }
-//            } else if (y == 0)
-            if (inRange(0, width-1, x+1) && inRange(0, height -1, y) && maze[x+1][y].getvisited() == false){ //check east neighbor
-                neighbours.push_back(0);
-            }
-            if (inRange(0, width-1, x) && inRange(0, height -1, y + 1) && maze[x][y+1].getvisited()== false){//check south neighbor
-                neighbours.push_back(1);
-            }
-            if (inRange(0, width-1, x-1) && inRange(0, height -1, y) && maze[x-1][y].getvisited()== false){//check west neighbor
-                neighbours.push_back(2);
-            }
-            if (inRange(0, width-1, x) && inRange(0, height -1, y - 1) && maze[x][y-1].getvisited()== false){//check north  neighbor
-                neighbours.push_back(3);
-            }
+            //become of maze, make the Path
 
+            while (true){
+                int x = currentLocation[0];
+                int y = currentLocation[1];
+                if (inRange(0, width-1, x+1) && inRange(0, height -1, y) && maze[x+1][y].getvisited() == false){ //check east neighbor
+                    neighbours.push_back(0);
+                }
+                if (inRange(0, width-1, x) && inRange(0, height -1, y + 1) && maze[x][y+1].getvisited()== false){//check south neighbor
+                    neighbours.push_back(1);
+                }
+                if (inRange(0, width-1, x-1) && inRange(0, height -1, y) && maze[x-1][y].getvisited()== false){//check west neighbor
+                    neighbours.push_back(2);
+                }
+                if (inRange(0, width-1, x) && inRange(0, height -1, y - 1) && maze[x][y-1].getvisited()== false){//check north  neighbor
+                    neighbours.push_back(3);
+                }
+
+                //random move
+                if (!neighbours.empty()){
+                    srand(time(NULL));
+                    int ran = rand() % neighbours.size();
+                    int move = neighbours[ran];
+                    neighbours.clear();
+                    if (move == 0){ //go to right
+                        maze[x][y].getedge_list().at(0)[2] = maze[x][y].getedge_list().at(0)[0];
+                        maze[x][y].getedge_list().at(0)[3] = maze[x][y].getedge_list().at(0)[1];
+                        maze[x+1][y].getedge_list()[2][2] = maze[x+1][y].getedge_list()[2][0];
+                        maze[x+1][y].getedge_list()[2][3] = maze[x+1][y].getedge_list()[2][1];
+                        currentLocation[0] = x+1;
+                        currentLocation[1] = y;
+                        maze[x+1][y].setvisited(true);
+                        cells++;
+                    }else if (move == 1){ //go to bottom
+                        maze[x][y].getedge_list().at(1)[2] = maze[x][y].getedge_list().at(1)[0];
+                        maze[x][y].getedge_list().at(1)[3] = maze[x][y].getedge_list().at(1)[1];
+                        maze[x][y+1].getedge_list().at(3)[2] = maze[x][y+1].getedge_list().at(3)[0];
+                        maze[x][y+1].getedge_list().at(3)[3] = maze[x][y+1].getedge_list().at(3)[1];
+                        currentLocation[0] = x;
+                        currentLocation[1] = y+1;
+                        maze[x][y+1].setvisited(true);
+                        cells++;
+                    }else if (move == 2){ //go to left
+                        maze[x][y].getedge_list().at(2)[2] = maze[x][y].getedge_list().at(2)[0];
+                        maze[x][y].getedge_list().at(2)[3] = maze[x][y].getedge_list().at(2)[1];
+                        maze[x-1][y].getedge_list().at(0)[2] = maze[x-1][y].getedge_list().at(0)[0];
+                        maze[x-1][y].getedge_list().at(0)[3] = maze[x-1][y].getedge_list().at(0)[1];
+                        currentLocation[0] = x-1;
+                        currentLocation[1] = y;
+                        maze[x-1][y].setvisited(true);
+                        cells++;
+                    }else if (move == 3){ //go to top
+                        maze[x][y].getedge_list().at(3)[2] = maze[x][y].getedge_list().at(3)[0];
+                        maze[x][y].getedge_list().at(3)[3] = maze[x][y].getedge_list().at(3)[1];
+                        maze[x][y-1].getedge_list().at(1)[2] = maze[x][y-1].getedge_list().at(1)[0];
+                        maze[x][y-1].getedge_list().at(1)[3] = maze[x][y-1].getedge_list().at(1)[1];
+                        currentLocation[0] = x;
+                        currentLocation[1] = y-1;
+                        maze[x][y-1].setvisited(true);
+                        cells++;
+                    } else{
+                        cout <<"error path!" <<endl;
+                    }
+                }else if(cells==height*width) {
+                    return 0;
+                }else{
+                    int colum = 0;
+                    while (colum < height){
+                        for (int i = 0; i < width; ++i) {
+                            if(maze[i][colum].getvisited() == false){
+                                currentLocation[0] = i;
+                                currentLocation[1] = colum;
+                                break;
+                            }
+                        }
+                        colum++;
+                    }
+                }
+            }
         }
         void toCoord(){
             for (int i = 0; i < width ; ++i) {
@@ -133,10 +194,7 @@ class MazeGame {
         void setwidth(int w){width = w;}
         int getheight(){return height;}
         int getwidth(){return width;}
-
 };
-
-
 int main() {
     int width;
     int height;
@@ -146,8 +204,8 @@ int main() {
     cin >> height;
     MazeGame mazeGame;
     mazeGame.constructor(height,width);
-    mazeGame.creatingMaze();
-    mazeGame.toCoord();
+    cout << "GGEZ!"<< mazeGame.creatingMaze();
+//    mazeGame.toCoord();
 
 
 
