@@ -5,6 +5,8 @@
 #include <vector>
 #include <type_traits>
 #include <cstdlib>
+#include <fstream>
+#include<time.h>
 using namespace std;
 
 typedef array<int, 4> edge;
@@ -21,17 +23,16 @@ class Cell {
         bool visited;
         array<edge, 4> edge_lists;
         array<int, 2> coord;
-    public://method or action on the attribubtes
+        bool killed;
+public://method or action on the attribubtes
         void setedge_list(array<edge, 4> new_edge_list){edge_lists = new_edge_list;}
         void setvisited(bool status){visited = status;}
-        void setcoord(array<int, 2> newCoord){coord = newCoord;}
+        void setkilled(bool status){killed = status;}
+
+    void setcoord(array<int, 2> newCoord){coord = newCoord;}
         auto getedge_list(){return edge_lists;}
         bool getvisited(){return visited;}
-
-
-
-
-
+        bool getkilled(){return killed;}
 
 
 };
@@ -65,10 +66,12 @@ class MazeGame {
                     if (i==0 && j == 0){
                         cell.setedge_list(temp_edges);
                         cell.setvisited(true);
+                        cell.setkilled(false);
                         cell.setcoord({i,j});
                     }else{
                         cell.setedge_list(temp_edges);
                         cell.setvisited(false);
+                        cell.setkilled(false);
                         cell.setcoord({i,j});
                     }
                     colums.push_back(cell);
@@ -77,7 +80,6 @@ class MazeGame {
             }
             setmaze(temp_maze);
             //become of maze, make the Path
-
             while (true){
                 int x = currentLocation[0];
                 int y = currentLocation[1];
@@ -96,70 +98,177 @@ class MazeGame {
 
                 //random move
                 if (!neighbours.empty()){
-                    srand(time(NULL));
+                    srand(clock());
                     int ran = rand() % neighbours.size();
                     int move = neighbours[ran];
                     neighbours.clear();
                     if (move == 0){ //go to right
-                        maze[x][y].getedge_list().at(0)[2] = maze[x][y].getedge_list().at(0)[0];
-                        maze[x][y].getedge_list().at(0)[3] = maze[x][y].getedge_list().at(0)[1];
-                        maze[x+1][y].getedge_list()[2][2] = maze[x+1][y].getedge_list()[2][0];
-                        maze[x+1][y].getedge_list()[2][3] = maze[x+1][y].getedge_list()[2][1];
+                        array<edge, 4> temp_edges1 = maze[x][y].getedge_list();
+                        array<edge, 4> temp_edges2 = maze[x+1][y].getedge_list();
+                        temp_edges1.at(0)[2] = temp_edges1.at(0)[0];
+                        temp_edges1.at(0)[3] = temp_edges1.at(0)[1];
+                        temp_edges2[2][2] = temp_edges2[2][0];
+                        temp_edges2[2][3] = temp_edges2[2][1];
+                        maze[x][y].setedge_list(temp_edges1);
+                        maze[x][y].setkilled(true);
+                        maze[x+1][y].setedge_list(temp_edges2);
                         currentLocation[0] = x+1;
                         currentLocation[1] = y;
                         maze[x+1][y].setvisited(true);
+                        maze[x+1][y].setkilled(true);
+
                         cells++;
                     }else if (move == 1){ //go to bottom
-                        maze[x][y].getedge_list().at(1)[2] = maze[x][y].getedge_list().at(1)[0];
-                        maze[x][y].getedge_list().at(1)[3] = maze[x][y].getedge_list().at(1)[1];
-                        maze[x][y+1].getedge_list().at(3)[2] = maze[x][y+1].getedge_list().at(3)[0];
-                        maze[x][y+1].getedge_list().at(3)[3] = maze[x][y+1].getedge_list().at(3)[1];
+                        array<edge, 4> temp_edges1 = maze[x][y].getedge_list();
+                        array<edge, 4> temp_edges2 = maze[x][y+1].getedge_list();
+                        temp_edges1.at(1)[2] = temp_edges1.at(1)[0];
+                        temp_edges1.at(1)[3] = temp_edges1.at(1)[1];
+                        temp_edges2.at(3)[2] = temp_edges2.at(3)[0];
+                        temp_edges2.at(3)[3] = temp_edges2.at(3)[1];
+                        maze[x][y].setedge_list(temp_edges1);
+                        maze[x][y].setkilled(true);
+                        maze[x][y+1].setedge_list(temp_edges2);
                         currentLocation[0] = x;
                         currentLocation[1] = y+1;
                         maze[x][y+1].setvisited(true);
+                        maze[x][y+1].setkilled(true);
+
                         cells++;
                     }else if (move == 2){ //go to left
-                        maze[x][y].getedge_list().at(2)[2] = maze[x][y].getedge_list().at(2)[0];
-                        maze[x][y].getedge_list().at(2)[3] = maze[x][y].getedge_list().at(2)[1];
-                        maze[x-1][y].getedge_list().at(0)[2] = maze[x-1][y].getedge_list().at(0)[0];
-                        maze[x-1][y].getedge_list().at(0)[3] = maze[x-1][y].getedge_list().at(0)[1];
+                        array<edge, 4> temp_edges1 = maze[x][y].getedge_list();
+                        array<edge, 4> temp_edges2 = maze[x-1][y].getedge_list();
+                        temp_edges1.at(2)[2] = temp_edges1.at(2)[0];
+                        temp_edges1.at(2)[3] = temp_edges1.at(2)[1];
+                        temp_edges2.at(0)[2] = temp_edges2.at(0)[0];
+                        temp_edges2.at(0)[3] = temp_edges2.at(0)[1];
+                        maze[x][y].setedge_list(temp_edges1);
+                        maze[x][y].setkilled(true);
+                        maze[x-1][y].setedge_list(temp_edges2);
                         currentLocation[0] = x-1;
                         currentLocation[1] = y;
                         maze[x-1][y].setvisited(true);
+                        maze[x-1][y].setkilled(true);
+
                         cells++;
                     }else if (move == 3){ //go to top
-                        maze[x][y].getedge_list().at(3)[2] = maze[x][y].getedge_list().at(3)[0];
-                        maze[x][y].getedge_list().at(3)[3] = maze[x][y].getedge_list().at(3)[1];
-                        maze[x][y-1].getedge_list().at(1)[2] = maze[x][y-1].getedge_list().at(1)[0];
-                        maze[x][y-1].getedge_list().at(1)[3] = maze[x][y-1].getedge_list().at(1)[1];
+                        array<edge, 4> temp_edges1 = maze[x][y].getedge_list();
+                        array<edge, 4> temp_edges2 = maze[x][y-1].getedge_list();
+                        temp_edges1.at(3)[2] = temp_edges1.at(3)[0];
+                        temp_edges1.at(3)[3] = temp_edges1.at(3)[1];
+                        temp_edges2.at(1)[2] = temp_edges2.at(1)[0];
+                        temp_edges2.at(1)[3] = temp_edges2.at(1)[1];
+                        maze[x][y].setedge_list(temp_edges1);
+                        maze[x][y].setkilled(true);
+                        maze[x][y-1].setedge_list(temp_edges2);
                         currentLocation[0] = x;
                         currentLocation[1] = y-1;
                         maze[x][y-1].setvisited(true);
+                        maze[x][y-1].setkilled(true);
                         cells++;
                     } else{
                         cout <<"error path!" <<endl;
                     }
-                }else if(cells==height*width) {
-                    return 0;
-                }else{
-                    int colum = 0;
-                    while (colum < height){
-                        for (int i = 0; i < width; ++i) {
-                            if(maze[i][colum].getvisited() == false){
-                                currentLocation[0] = i;
-                                currentLocation[1] = colum;
-                                break;
+                }else if(!maze[x][y].getkilled()){
+                    if (inRange(0, width-1, x+1) && inRange(0, height -1, y)){ //check east neighbor
+                        neighbours.push_back(0);
+                    }
+                    if (inRange(0, width-1, x) && inRange(0, height -1, y + 1)){//check south neighbor
+                        neighbours.push_back(1);
+                    }
+                    if (inRange(0, width-1, x-1) && inRange(0, height -1, y)){//check west neighbor
+                        neighbours.push_back(2);
+                    }
+                    if (inRange(0, width-1, x) && inRange(0, height -1, y - 1)){//check north  neighbor
+                        neighbours.push_back(3);
+                    }
+                    srand(clock());
+                    int ran = rand() % neighbours.size();
+                    int move = neighbours[ran];
+                    neighbours.clear();
+                    if (move == 0){ //go to right
+                        array<edge, 4> temp_edges1 = maze[x][y].getedge_list();
+                        array<edge, 4> temp_edges2 = maze[x+1][y].getedge_list();
+                        temp_edges1.at(0)[2] = temp_edges1.at(0)[0];
+                        temp_edges1.at(0)[3] = temp_edges1.at(0)[1];
+                        temp_edges2[2][2] = temp_edges2[2][0];
+                        temp_edges2[2][3] = temp_edges2[2][1];
+                        maze[x][y].setedge_list(temp_edges1);
+                        maze[x][y].setkilled(true);
+                        maze[x+1][y].setedge_list(temp_edges2);
+                    }else if (move == 1){ //go to bottom
+                        array<edge, 4> temp_edges1 = maze[x][y].getedge_list();
+                        array<edge, 4> temp_edges2 = maze[x][y+1].getedge_list();
+                        temp_edges1.at(1)[2] = temp_edges1.at(1)[0];
+                        temp_edges1.at(1)[3] = temp_edges1.at(1)[1];
+                        temp_edges2.at(3)[2] = temp_edges2.at(3)[0];
+                        temp_edges2.at(3)[3] = temp_edges2.at(3)[1];
+                        maze[x][y].setedge_list(temp_edges1);
+                        maze[x][y].setkilled(true);
+                        maze[x][y+1].setedge_list(temp_edges2);
+                    }else if (move == 2){ //go to left
+                        array<edge, 4> temp_edges1 = maze[x][y].getedge_list();
+                        array<edge, 4> temp_edges2 = maze[x-1][y].getedge_list();
+                        temp_edges1.at(2)[2] = temp_edges1.at(2)[0];
+                        temp_edges1.at(2)[3] = temp_edges1.at(2)[1];
+                        temp_edges2.at(0)[2] = temp_edges2.at(0)[0];
+                        temp_edges2.at(0)[3] = temp_edges2.at(0)[1];
+                        maze[x][y].setedge_list(temp_edges1);
+                        maze[x][y].setkilled(true);
+                        maze[x-1][y].setedge_list(temp_edges2);
+                    }else if (move == 3){ //go to top
+                        array<edge, 4> temp_edges1 = maze[x][y].getedge_list();
+                        array<edge, 4> temp_edges2 = maze[x][y-1].getedge_list();
+                        temp_edges1.at(3)[2] = temp_edges1.at(3)[0];
+                        temp_edges1.at(3)[3] = temp_edges1.at(3)[1];
+                        temp_edges2.at(1)[2] = temp_edges2.at(1)[0];
+                        temp_edges2.at(1)[3] = temp_edges2.at(1)[1];
+                        maze[x][y].setedge_list(temp_edges1);
+                        maze[x][y].setkilled(true);
+                        maze[x][y-1].setedge_list(temp_edges2);
+                    } else{
+                        cout <<"error path!" <<endl;
+                    }
+                } else if(cells == height*width) {
+                        return 0;
+                        }else{
+                            int y_loop = 0;
+                            bool condition = true;
+                            while (y_loop < height && condition){
+                                for (int x_loop = 0; x_loop < width; x_loop++) {
+                                    if(!maze[x_loop][y_loop].getvisited()){
+                                        currentLocation[0] = x_loop;
+                                        currentLocation[1] = y_loop;
+                                        maze[x_loop][y_loop].setvisited(true);
+                                        cells++;
+                                        condition = false;
+                                        break;
+                                    }
+                                }
+                                y_loop++;
                             }
                         }
-                        colum++;
-                    }
-                }
+
+//                if(maze[x][y].getvisited()== false){
+//                    if (inRange(0, width-1, x+1) && inRange(0, height -1, y) && maze[x+1][y].getvisited() == false){ //check east neighbor
+//                        neighbours.push_back(0);
+//                    }
+//                    if (inRange(0, width-1, x) && inRange(0, height -1, y + 1) && maze[x][y+1].getvisited()== false){//check south neighbor
+//                        neighbours.push_back(1);
+//                    }
+//                    if (inRange(0, width-1, x-1) && inRange(0, height -1, y) && maze[x-1][y].getvisited()== false){//check west neighbor
+//                        neighbours.push_back(2);
+//                    }
+//                    if (inRange(0, width-1, x) && inRange(0, height -1, y - 1) && maze[x][y-1].getvisited()== false){//check north  neighbor
+//                        neighbours.push_back(3);
+//                    }
+//                }
             }
         }
         void toCoord(){
             for (int i = 0; i < width ; ++i) {
                 for (int j = 0; j < height; ++j) {
                     int edgeN = 0;
+                    cout << "cell" << i << "," << j <<endl;
                     array<edge, 4> edges = maze[i][j].getedge_list();
                     for (auto itEdge = edges.begin(); itEdge != edges.end(); itEdge++)
                     {
@@ -195,6 +304,33 @@ class MazeGame {
         int getheight(){return height;}
         int getwidth(){return width;}
 };
+
+
+// Generation of the two segments
+
+void mazer(MazeGame maze) {
+    ofstream svgFile("gensvg.svg", ofstream::out);
+    svgFile << "<svg"<< " viewBox="<< "\"0 0 100 100\""<< " width" << "=" <<"\"500\""<<" height=\"" << 500 << "\""
+         << " xmlns=" << "\"http://www.w3.org/2000/svg\">" << endl;
+    svgFile << "<rect width =" <<"\'100\' " << "height=\'" << "100" << "\' " << "style=\'" << "fill: black\' " << "/>" << endl;
+    for (int i = 0; i < maze.getwidth(); ++i) {
+        for (int j = 0; j < maze.getheight(); ++j) {
+            for (int k = 0; k < 4; ++k) {
+                int x1 =  maze.getmaze()[i][j].getedge_list()[k][0];
+                int y1 =  maze.getmaze()[i][j].getedge_list()[k][1];
+                int x2 =  maze.getmaze()[i][j].getedge_list()[k][2];
+                int y2 =  maze.getmaze()[i][j].getedge_list()[k][3];
+                svgFile << "<line stroke=\'" << "white\' " << "stroke-width=\'" << "0.4\'" << " x1=\'" << x1 << "\' y1=\'" << y1
+                     << "\' x2=\'" << x2 << "\' y2=\'" << y2 << "\'/>" << endl;
+            }
+        }
+    }
+    svgFile << "</svg>" << endl;
+    svgFile.close();
+}
+void input(){
+
+}
 int main() {
     int width;
     int height;
@@ -204,12 +340,8 @@ int main() {
     cin >> height;
     MazeGame mazeGame;
     mazeGame.constructor(height,width);
-    cout << "GGEZ!"<< mazeGame.creatingMaze();
-//    mazeGame.toCoord();
-
-
-
-
-
+    cout << mazeGame.creatingMaze()<< endl;
+    cout << "GGEZ!"<< endl;
+    mazer(mazeGame);
     return 0;
 }
