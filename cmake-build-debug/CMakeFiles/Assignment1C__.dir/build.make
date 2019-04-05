@@ -57,27 +57,27 @@ include CMakeFiles/Assignment1C__.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/Assignment1C__.dir/flags.make
 
-CMakeFiles/Assignment1C__.dir/main.cpp.o: CMakeFiles/Assignment1C__.dir/flags.make
-CMakeFiles/Assignment1C__.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/toando0612/Google Drive/C++/Assignment1C++/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Assignment1C__.dir/main.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Assignment1C__.dir/main.cpp.o -c "/Users/toando0612/Google Drive/C++/Assignment1C++/main.cpp"
+CMakeFiles/Assignment1C__.dir/mazer.cpp.o: CMakeFiles/Assignment1C__.dir/flags.make
+CMakeFiles/Assignment1C__.dir/mazer.cpp.o: ../mazer.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/toando0612/Google Drive/C++/Assignment1C++/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Assignment1C__.dir/mazer.cpp.o"
+	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Assignment1C__.dir/mazer.cpp.o -c "/Users/toando0612/Google Drive/C++/Assignment1C++/mazer.cpp"
 
-CMakeFiles/Assignment1C__.dir/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Assignment1C__.dir/main.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/Users/toando0612/Google Drive/C++/Assignment1C++/main.cpp" > CMakeFiles/Assignment1C__.dir/main.cpp.i
+CMakeFiles/Assignment1C__.dir/mazer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Assignment1C__.dir/mazer.cpp.i"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/Users/toando0612/Google Drive/C++/Assignment1C++/mazer.cpp" > CMakeFiles/Assignment1C__.dir/mazer.cpp.i
 
-CMakeFiles/Assignment1C__.dir/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Assignment1C__.dir/main.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/Users/toando0612/Google Drive/C++/Assignment1C++/main.cpp" -o CMakeFiles/Assignment1C__.dir/main.cpp.s
+CMakeFiles/Assignment1C__.dir/mazer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Assignment1C__.dir/mazer.cpp.s"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/Users/toando0612/Google Drive/C++/Assignment1C++/mazer.cpp" -o CMakeFiles/Assignment1C__.dir/mazer.cpp.s
 
 # Object files for target Assignment1C__
 Assignment1C___OBJECTS = \
-"CMakeFiles/Assignment1C__.dir/main.cpp.o"
+"CMakeFiles/Assignment1C__.dir/mazer.cpp.o"
 
 # External object files for target Assignment1C__
 Assignment1C___EXTERNAL_OBJECTS =
 
-Assignment1C__: CMakeFiles/Assignment1C__.dir/main.cpp.o
+Assignment1C__: CMakeFiles/Assignment1C__.dir/mazer.cpp.o
 Assignment1C__: CMakeFiles/Assignment1C__.dir/build.make
 Assignment1C__: CMakeFiles/Assignment1C__.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/Users/toando0612/Google Drive/C++/Assignment1C++/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable Assignment1C__"

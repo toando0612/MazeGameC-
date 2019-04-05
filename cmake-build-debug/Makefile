@@ -123,32 +123,32 @@ Assignment1C__/fast:
 	$(MAKE) -f CMakeFiles/Assignment1C__.dir/build.make CMakeFiles/Assignment1C__.dir/build
 .PHONY : Assignment1C__/fast
 
-main.o: main.cpp.o
+mazer.o: mazer.cpp.o
 
-.PHONY : main.o
+.PHONY : mazer.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) -f CMakeFiles/Assignment1C__.dir/build.make CMakeFiles/Assignment1C__.dir/main.cpp.o
-.PHONY : main.cpp.o
+mazer.cpp.o:
+	$(MAKE) -f CMakeFiles/Assignment1C__.dir/build.make CMakeFiles/Assignment1C__.dir/mazer.cpp.o
+.PHONY : mazer.cpp.o
 
-main.i: main.cpp.i
+mazer.i: mazer.cpp.i
 
-.PHONY : main.i
+.PHONY : mazer.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) -f CMakeFiles/Assignment1C__.dir/build.make CMakeFiles/Assignment1C__.dir/main.cpp.i
-.PHONY : main.cpp.i
+mazer.cpp.i:
+	$(MAKE) -f CMakeFiles/Assignment1C__.dir/build.make CMakeFiles/Assignment1C__.dir/mazer.cpp.i
+.PHONY : mazer.cpp.i
 
-main.s: main.cpp.s
+mazer.s: mazer.cpp.s
 
-.PHONY : main.s
+.PHONY : mazer.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) -f CMakeFiles/Assignment1C__.dir/build.make CMakeFiles/Assignment1C__.dir/main.cpp.s
-.PHONY : main.cpp.s
+mazer.cpp.s:
+	$(MAKE) -f CMakeFiles/Assignment1C__.dir/build.make CMakeFiles/Assignment1C__.dir/mazer.cpp.s
+.PHONY : mazer.cpp.s
 
 # Help Target
 help:
@@ -159,9 +159,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... Assignment1C__"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... mazer.o"
+	@echo "... mazer.i"
+	@echo "... mazer.s"
 .PHONY : help
 
 

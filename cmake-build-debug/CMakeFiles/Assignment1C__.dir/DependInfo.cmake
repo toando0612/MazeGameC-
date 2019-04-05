@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/toando0612/Google Drive/C++/Assignment1C++/main.cpp" "/Users/toando0612/Google Drive/C++/Assignment1C++/cmake-build-debug/CMakeFiles/Assignment1C__.dir/main.cpp.o"
+  "/Users/toando0612/Google Drive/C++/Assignment1C++/mazer.cpp" "/Users/toando0612/Google Drive/C++/Assignment1C++/cmake-build-debug/CMakeFiles/Assignment1C__.dir/mazer.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")
 
